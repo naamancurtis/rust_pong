@@ -18,9 +18,6 @@ impl SimpleState for Pong {
         // Loading our assets
         let sprite_sheet_handle = load_sprite_sheet(world);
 
-        // Registering the storage for entities
-        world.register::<Paddle>();
-
         // Initialising the entities
         initialise_paddles(world, sprite_sheet_handle);
         initialise_camera(world);
