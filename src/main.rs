@@ -1,7 +1,10 @@
+mod audio;
 mod pong;
 mod systems;
 
+use crate::audio::Music;
 use crate::pong::Pong;
+use amethyst::audio::{AudioBundle, DjSystemDesc};
 use amethyst::core::transform::TransformBundle;
 use amethyst::ui::{RenderUi, UiBundle};
 use amethyst::{
@@ -40,6 +43,7 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderUi::default()),
         )?
         .with_bundle(UiBundle::<StringBindings>::new())?
+        .with_bundle(AudioBundle::default())?
         .with(systems::PaddleSystem, "paddle_system", &["input_system"])
         .with(systems::MoveBallsSystem, "ball_system", &[])
         .with(
@@ -47,7 +51,12 @@ fn main() -> amethyst::Result<()> {
             "collision_system",
             &["paddle_system", "ball_system"],
         )
-        .with(systems::WinnerSystem, "winner_system", &["ball_system"]);
+        .with(systems::WinnerSystem, "winner_system", &["ball_system"])
+        .with_system_desc(
+            DjSystemDesc::new(|music: &mut Music| music.music.next()),
+            "dj_system",
+            &[],
+        );
 
     let assets_dir = app_root.join("assets");
     let mut game = Application::new(assets_dir, Pong::default(), game_data)?;
