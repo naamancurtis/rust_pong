@@ -21,7 +21,7 @@ impl<'s> System<'s> for MoveBallsSystem {
     fn run(&mut self, (balls, mut locals, time): Self::SystemData) {
         for (ball, local) in (&balls, &mut locals).join() {
             local.prepend_translation_x(ball.velocity[0] * time.delta_seconds());
-            local.prepend_translation_x(ball.velocity[1] * time.delta_seconds());
+            local.prepend_translation_y(ball.velocity[1] * time.delta_seconds());
         }
     }
 }
